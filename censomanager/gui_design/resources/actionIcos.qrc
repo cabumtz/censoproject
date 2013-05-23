@@ -1,0 +1,11 @@
+<RCC>
+  <qresource prefix="icos32">
+    <file>icos32/applications-internet.png</file>
+    <file>icos32/help-browser.png</file>
+    <file>icos32/system-log-out.png</file>
+    <file>icos32/document-save-as.png</file>
+    <file>icos32/media-playback-start.png</file>
+    <file>icos32/media-playback-stop.png</file>
+    <file>icos32/view-refresh.png</file>
+  </qresource>
+</RCC>

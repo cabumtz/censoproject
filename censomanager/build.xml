@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+
+<project name="censomanager" default="build" basedir=".">
+
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+
+	<property file="build.properties" />
+
+	<echo message="censomanager build script" />
+
+
+	<!-- ==================================================================================================== -->
+	<!-- clean -->
+	<!-- ==================================================================================================== -->
+	<target name="clean">
+
+		<delete verbose="true">
+			<fileset dir="${gui.module.dir}" casesensitive="true">
+				<include name="**/ui_*.py" />
+				<exclude name="__init__.py" />
+			</fileset>
+
+			<fileset dir="${gui.module.resources.dir}" casesensitive="true">
+				<include name="**/*_rc.py" />
+				<exclude name="__init__.py" />
+			</fileset>
+		</delete>
+	</target>
+	<!-- ==================================================================================================== -->
+	<!-- build gui -->
+	<!-- ==================================================================================================== -->
+	<target name="build.gui.design">
+
+		<!-- ui_mainWindow.py -->
+		<!--
+		<outofdate verbose="true">
+			<sourcefiles path="${gui.design.dir}/mainWindow.ui" />
+			<targetfiles path="${gui.module.dir}/ui_mainWindow.py" />
+			<sequential>
+				<exec executable="cmd" output="${gui.module.dir}/ui_mainWindow.py" failifexecutionfails="true" failonerror="true" logerror="true" >
+					<arg value="/c" />
+					<arg value="${pyqt.pyuic4}" />
+					<arg value="${gui.design.dir}/mainWindow.ui" />
+				</exec>
+			</sequential>
+		</outofdate>
+		-->
+
+		<outofdate verbose="true">
+			<sourcefiles path="${gui.design.dir}/mainDialog.ui" />
+			<targetfiles path="${gui.module.dir}/ui_mainDialog.py" />
+			<sequential>
+				<exec executable="cmd" output="${gui.module.dir}/ui_mainDialog.py" failifexecutionfails="true" failonerror="true" logerror="true">
+					<arg value="/c" />
+					<arg value="${pyqt.pyuic4}" />
+					<arg value="${gui.design.dir}/mainDialog.ui" />
+				</exec>
+			</sequential>
+		</outofdate>
+
+	</target>
+
+	<!-- ==================================================================================================== -->
+	<!-- build resources -->
+	<!-- ==================================================================================================== -->
+	<target name="build.gui.design.resources">
+
+		<!-- action icos -->
+		<outofdate verbose="true">
+			<sourcefiles path="${gui.design.resources.dir}/actionIcos.qrc" />
+			<targetfiles path="${gui.module.resources.dir}/actionIcos_rc.py" />
+			<sequential>
+				<exec executable="${pyqt.pyrcc4}" output="${gui.module.resources.dir}/actionIcos_rc.py">
+					<arg line="${pyqt.pyrcc4.flags}" />
+					<arg value="${gui.design.resources.dir}/actionIcos.qrc" />
+				</exec>
+			</sequential>
+		</outofdate>
+
+		<!-- background images -->
+		<!--
+		<outofdate verbose="true">
+			<sourcefiles path="${gui.design.resources.dir}/backgroundImages.qrc" />
+			<targetfiles path="${gui.module.resources.dir}/backgroundImages_rc.py" />
+			<sequential>
+				<exec executable="${pyqt.pyrcc4}" output="${gui.module.resources.dir}/backgroundImages_rc.py">
+					<arg line="${pyqt.pyrcc4.flags}" />
+					<arg value="${gui.design.resources.dir}/backgroundImages.qrc" />
+				</exec>
+			</sequential>
+		</outofdate>
+		-->
+	</target>
+
+	<!-- ==================================================================================================== -->
+	<!-- build -->
+	<!-- ==================================================================================================== -->
+	<target name="build" depends="build.gui.design, build.gui.design.resources" />
+
+	<!-- ==================================================================================================== -->
+	<!-- run -->
+	<!-- ==================================================================================================== -->
+	<target name="run" depends="build">
+		<!-- execute -->
+		<exec executable="${python.bin.fullpath}" dir=".">
+			<arg value="-u" />
+
+			<arg value="${app.main.module.path}" />
+
+			<env key="PYTHONPATH" path="." />
+		</exec>
+	</target>
+
+	<!-- ==================================================================================================== -->
+	<!-- pytoexe -->
+	<!-- ==================================================================================================== -->
+	<target name="build.py2exe" depends="build">
+
+		<!-- censomanager.exe -->
+		<exec executable="${python.bin.fullpath}" dir="." output="${logs.dir}/${logs.py2exe.name}">
+			<arg value="setup.py" />
+
+			<arg value="py2exe" />
+
+			<env key="PYTHONPATH" path="." />
+		</exec>
+		<!--
+		<outofdate verbose="true">
+			
+			<sourcefiles>
+				<fileset dir="${app.main.dir}" includes="**/*.py" />
+			</sourcefiles>
+			
+			<targetfiles path="dist/censomanager.exe" />
+			
+			<sequential>
+				<exec executable="${python.bin.fullpath}" dir="." output="${logs.dir}/${logs.py2exe.name}" >
+					<arg value="setup.py" />
+						
+					<arg value="py2exe" />
+					
+					<env key="PYTHONPATH" path="." />
+				</exec>
+			</sequential>
+			
+		</outofdate>
+		-->
+
+	</target>
+</project>
